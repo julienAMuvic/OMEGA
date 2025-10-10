@@ -48,8 +48,6 @@ INDEX:
      xxxii) Appendix A1\
      xxxiii)Methods Annex\
      xxxiv) Registry Act pilot\
-  c. Supporting\
-     (assorted_early_article_development)
 2. Yggdrasil_Book - The theoretical framework/philosophy\
   a. First_Project_Chats\
      i)     Grok_Project_Book_Chat_Project-Folder-files\
@@ -175,5 +173,7 @@ INDEX:
      xiv)   Concord12_Example\
      xv)    HAIL_Omega\
      xvi)   HAIL_Omega_Example
-6. Supporting_Artifacts - assorted images and files produced.
+6. Supporting_Artifacts - *assorted images and files produced*
+7. Article_Formation_Sept01-25 - *assorted artifacts*
+8. Book_Formation_Sept25-27 - *assorted artifacts*
 
