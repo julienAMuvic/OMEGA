@@ -143,7 +143,7 @@ INDEX:
   b. Sanity_Checks\
      i)     Grok_Project_Bucklar_Chat_Fractal-Geomtery\
      ii)    Grok_Project_Bucklar_Chat_P-vs-NP-Problem-Solving
-4. Culmination - multi agent collaboration
+4. Culmination - multi agent collaboration\
      i)     Claude-Session 1_ Discovery & Outreach\
      ii)    Claude-Session 2_ Geometric Grammaton Physics complexity theory\
      iii)   RailAdmissible_MainResult\
