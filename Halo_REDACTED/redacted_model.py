@@ -1,54 +1,74 @@
-"""REDACTED program model, v2.
+"""REDACTED program model.
 
-Extends the draft's Appendix A revenue model with:
-  1. live costs for years 2-5, set by the five-mode ladder;
-  2. server cost that scales with the active population;
-  3. development and marketing costs compounded forward to launch;
-  4. Steam's tiered fee computed per case, and two views of the Xbox store fee;
-  5. Game Pass entry after year one (Xbox copy cannibalization, Game Pass players);
-  6. a reference-class expected value and the preproduction option condition.
+Revenue: copies, in-game spend and paid theater expansions over five live years.
+Cost: preproduction, production and marketing compounded forward to launch, plus
+five years of live operations run on the five-mode ladder, less the franchise
+reuse credit. Two launch editions share the model:
 
-All money in $M. Launch-dated: year 1 of live is undiscounted, year t is
-discounted by (1+r)^(t-1), matching the draft's PV convention; costs incurred
-before launch are compounded forward to the launch date at the same rate.
+  Battlefront  $50  Strike Ops and 64-player Battlefronts with the Halo vehicle roster
+  Theater      $60  adds one Grand Theater region (hundreds of players, ground to orbit)
+
+All money in $M, dated to launch: live year 1 is undiscounted, year t is
+discounted by (1+r)^(t-1); costs before launch are compounded forward at r.
 """
 from dataclasses import dataclass, replace
 
-R = 0.10                       # discount rate
+R = 0.10                           # discount rate
 SHARE = [.55, .20, .12, .08, .05]  # share of lifetime copies sold in year t
-PRICE = 35.0                   # realized gross price per copy (Helldivers 2)
+REALIZED = 35.0 / 40.0             # realized / list price (Helldivers 2: ~$35 on $40)
 MIX = {"steam": .50, "ps": .25, "xbox": .25}
-DECAY = 0.30                   # annual decline in spend and engagement per owner
+DECAY = 0.30                       # annual decline in spend and engagement per owner
 EXP_PRICE = 20.0
 
-# ---- Core-scale costs (nominal, from the draft) ----
-PREPROD = [(0, 6, 7.0), (6, 12, 11.0), (12, 18, 16.0)]   # tranches (start, end month, $M)
-PRODUCTION = (18, 48, 161.0)
-MARKETING = [(24, 36, .15), (36, 48, .35), (48, 60, .50)]  # share of $117M by window
-MARKETING_TOTAL = 117.0
-REUSE_CREDIT = 29.0
+# ---- Cost method ----
+AGENT_SAVING = 0.058               # conservative agent-assisted scenario
+PREPROD = [(0, 6, 7.0), (6, 12, 11.0), (12, 18, 16.0)]      # tranches (start, end month, $M)
+PROD_WINDOW = (18, 48)
+MARKETING_SHARE = 0.60             # of development
+MARKETING = [(24, 36, .15), (36, 48, .35), (48, 60, .50)]    # share of marketing by window
+REUSE_SHARE = 0.15                 # of development
 LAUNCH_MONTH = 48
 
 # ---- Live operations ----
-# Draft: C_live = $51M in year one = 180-person team + $18M servers -> $33M team.
-TEAM_COST_PER_HEAD = 33.0 / 180            # $0.183M per live head
-MODE_HEADS = {1: 180, 2: 130, 3: 90, 4: 45, 5: 8}
+TEAM_COST_PER_HEAD = 33.0 / 180    # $M per live head-year ($33M for 180 people)
 MODE_EXPANSIONS = {1: True, 2: True, 3: True, 4: True, 5: False}
+# share of full-war in-game spend and expansion attach each mode retains: fewer
+# live fronts and slower content hold fewer players' attention and wallets
+MODE_REVENUE_FACTOR = {1: 1.00, 2: 0.92, 3: 0.80, 4: 0.60, 5: 0.30}
 # server cost per active owner by mode: merged fronts and fewer shards cut overhead;
 # the archive runs on player-hosted custom servers plus a thin matchmaking layer
 MODE_SERVER_FACTOR = {1: 1.00, 2: 0.90, 3: 0.80, 4: 0.60, 5: 0.20}
-SERVER_BASE = 18.0                         # $M at Base-case year-one activity
-BASE_ACTIVE_Y1 = 8.0 * SHARE[0]            # 4.4M active owners
+SERVER_RATE = 18.0 / (8.0 * SHARE[0])   # $M per million active owner-years, Theater edition
+
+
+@dataclass(frozen=True)
+class Edition:
+    name: str
+    list_price: float
+    production_heads: int          # average over the 30-month production
+    production_cost: float         # nominal $M, from the budget model
+    mode_heads: tuple              # live team by mode 1..5
+    server_scale: float            # server cost per active owner, relative to Theater
+
+    def production(self):
+        return self.production_cost
+
+
+THEATER = Edition("Theater", 60.0, 260, 161.0, (180, 130, 90, 45, 8), 1.00)
+# Battlefront drops the Grand Theater technology and region team (about 40 production
+# heads, cost pro rata by headcount), 20 live heads, and a quarter of server cost
+BATTLEFRONT = Edition("Battlefront", 50.0, 220, 161.0 * 220 / 260, (160, 115, 80, 40, 8), 0.75)
 
 
 @dataclass
 class Case:
     name: str
-    copies: float        # lifetime copies, millions
-    spend: float         # gross in-game spend per owner, year one ($)
-    attach: float        # expansion attach rate
+    copies: float              # lifetime copies, millions
+    spend: float               # gross in-game spend per owner, year one ($)
+    attach: float              # expansion attach rate
+    edition: Edition = THEATER
     xbox_fee: float = 0.0      # 0.0 = consolidated Microsoft view; 0.30 = Activision view
-    game_pass: bool = False
+    game_pass: bool = True
     gp_cannibal: float = 0.50  # share of year-2+ Xbox copy sales lost to Game Pass
     gp_players: float = 1.00   # Game Pass players joining in year 2, per Xbox year-one copy
     gp_engage: float = 0.50    # Game Pass player spend and attach, relative to an owner
@@ -60,10 +80,6 @@ def steam_fee(gross):
     """Valve's tiered share on an app's lifetime Steam gross ($M)."""
     return (.30 * min(gross, 10) + .25 * max(0, min(gross, 50) - 10)
             + .20 * max(0, gross - 50)) / gross if gross > 0 else .30
-
-
-def team(mode):
-    return MODE_HEADS[mode] * TEAM_COST_PER_HEAD
 
 
 def compound(m):
@@ -79,29 +95,29 @@ def spread(start, end, amount):
         mid = m + 0.5
         if mid < LAUNCH_MONTH:
             out += amount / months * compound(mid)
-        else:  # post-launch: inside live year 1 (undiscounted) or later
+        else:
             out += amount / months / (1 + R) ** int((mid - LAUNCH_MONTH) // 12)
     return out
 
 
 def build_costs(c: Case):
-    dev_extra = c.dev_extra
-    mkt_total = MARKETING_TOTAL + 0.60 * dev_extra
-    nominal = {
-        "Preproduction": sum(a for _, _, a in PREPROD),
-        "Production": PRODUCTION[2] + dev_extra,
-        "Marketing": mkt_total,
-    }
+    e = c.edition
+    preprod = sum(a for _, _, a in PREPROD)
+    production = e.production() + c.dev_extra
+    development = preprod + production
+    marketing = MARKETING_SHARE * development
+    nominal = {"Preproduction": preprod, "Production": production, "Marketing": marketing}
     dated = {
-        "Preproduction": sum(spread(s, e, a) for s, e, a in PREPROD),
-        "Production": spread(PRODUCTION[0], PRODUCTION[1], PRODUCTION[2] + dev_extra),
-        "Marketing": sum(spread(s, e, w * mkt_total) for s, e, w in MARKETING),
+        "Preproduction": sum(spread(s, t, a) for s, t, a in PREPROD),
+        "Production": spread(*PROD_WINDOW, production),
+        "Marketing": sum(spread(s, t, w * marketing) for s, t, w in MARKETING),
     }
-    return nominal, dated
+    return nominal, dated, REUSE_SHARE * development
 
 
 def run(c: Case):
-    # copies by platform and year, after Game Pass cannibalization
+    e = c.edition
+    price = e.list_price * REALIZED
     years = range(1, 6)
     copies = []
     for t in years:
@@ -113,86 +129,67 @@ def run(c: Case):
 
     gp = [0.0] * 5
     if c.game_pass:
-        for t in range(1, 5):  # join in year 2, stay in the population
-            gp[t] = c.gp_players * copies[0]["xbox"]  # constant pool from year 2
+        for t in range(1, 5):          # Game Pass players join in year 2 and stay
+            gp[t] = c.gp_players * copies[0]["xbox"]
 
-    # first pass: gross revenue to size Steam's tier
-    owners, eff = [], []
-    cum = 0.0
+    owners, eff, cum = [], [], 0.0
     for t in years:
         cum += sum(copies[t - 1].values())
         owners.append(cum)
         eff.append(cum + c.gp_engage * gp[t - 1])
-    steam_share_rev = MIX["steam"]
-    steam_gross = (sum(cp["steam"] for cp in copies) * PRICE
-                   + sum(eff[t - 1] * c.spend * (1 - DECAY) ** (t - 1) for t in years) * steam_share_rev
-                   + sum(eff[t - 1] * c.attach * EXP_PRICE for t in years if t >= 2) * steam_share_rev)
-    fs = steam_fee(steam_gross)
-    fee = {"steam": fs, "ps": .30, "xbox": c.xbox_fee}
-    blended = sum(MIX[p] * fee[p] for p in MIX)
-    f = 1 - blended
+
+    steam_gross = (sum(cp["steam"] for cp in copies) * price
+                   + MIX["steam"] * sum(eff[t - 1] * c.spend * (1 - DECAY) ** (t - 1) for t in years)
+                   + MIX["steam"] * sum(eff[t - 1] * c.attach * EXP_PRICE for t in years if t >= 2))
+    fee = {"steam": steam_fee(steam_gross), "ps": .30, "xbox": c.xbox_fee}
+    f = 1 - sum(MIX[p] * fee[p] for p in MIX)
+
+    def team(mode):
+        return e.mode_heads[mode - 1] * TEAM_COST_PER_HEAD
 
     rows, pv_rev, pv_live = [], 0.0, 0.0
     for t in years:
         disc = (1 + R) ** (t - 1)
-        copy_rev = sum(copies[t - 1][p] * PRICE * (1 - fee[p]) for p in MIX)
-        e = eff[t - 1]
-        active = e * (1 - DECAY) ** (t - 1)
-        servers_full = SERVER_BASE * active / BASE_ACTIVE_Y1
+        copy_rev = sum(copies[t - 1][p] * price * (1 - fee[p]) for p in MIX)
+        n = eff[t - 1]
+        active = n * (1 - DECAY) ** (t - 1)
+        servers_full = SERVER_RATE * e.server_scale * active
+        spend_rev = n * c.spend * (1 - DECAY) ** (t - 1) * f
+
+        def live_rev(mode):
+            exp = n * c.attach * EXP_PRICE * f if (t >= 2 and MODE_EXPANSIONS[mode]) else 0.0
+            return (spend_rev + exp) * MODE_REVENUE_FACTOR[mode]
 
         def cost(mode):
             return team(mode) + servers_full * MODE_SERVER_FACTOR[mode]
-        spend_rev = e * c.spend * (1 - DECAY) ** (t - 1) * f
-
-        def live_rev(mode):
-            exp = e * c.attach * EXP_PRICE * f if (t >= 2 and MODE_EXPANSIONS[mode]) else 0.0
-            return spend_rev + exp
 
         if t == 1 or not c.ladder:
             mode = 1
         else:
-            mode = 5
-            for m in (1, 2, 3, 4):
-                if cost(m) <= live_rev(m):
-                    mode = m
-                    break
-        lr = live_rev(mode)
-        lc = cost(mode)
+            # run the mode with the best live margin; ties go to the fuller war
+            mode = max((1, 2, 3, 4, 5), key=lambda m: (live_rev(m) - cost(m), -m))
+        lr, lc = live_rev(mode), cost(mode)
+        per_owner = (c.spend * (1 - DECAY) ** (t - 1) * f
+                     + (c.attach * EXP_PRICE * f if (t >= 2 and MODE_EXPANSIONS[mode]) else 0)) * MODE_REVENUE_FACTOR[mode]
         rows.append(dict(t=t, owners=owners[t - 1], gp=gp[t - 1], active=active, mode=mode,
-                         copy_rev=copy_rev, live_rev=lr, live_cost=lc,
-                         breakeven_owners=lc / ((c.spend * (1 - DECAY) ** (t - 1) * f)
-                                                + (c.attach * EXP_PRICE * f if t >= 2 else 0)) ))
+                         copy_rev=copy_rev, live_rev=lr, live_cost=lc, breakeven_owners=lc / per_owner))
         pv_rev += (copy_rev + lr) / disc
         pv_live += lc / disc
 
-    nominal, dated = build_costs(c)
+    nominal, dated, reuse = build_costs(c)
     pv_build = sum(dated.values())
-    pv_cost = pv_build + pv_live
-    npv = pv_rev - pv_cost + REUSE_CREDIT
-    return dict(case=c, rows=rows, f=f, steam_fee=fs, pv_rev=pv_rev, pv_live=pv_live,
-                nominal=nominal, dated=dated, pv_build=pv_build, pv_cost=pv_cost,
-                attributed=pv_cost - REUSE_CREDIT, npv=npv,
-                multiple=pv_rev / (pv_cost - REUSE_CREDIT))
-
-
-def draft_pv(copies, spend, attach):
-    """The draft's Appendix A formula, unchanged, for reconciliation."""
-    n, f = 28.60, .82
-    o, tot = 0.0, 0.0
-    for t in range(1, 6):
-        o += SHARE[t - 1] * copies
-        v = SHARE[t - 1] * copies * n + o * spend * (1 - DECAY) ** (t - 1) * f
-        v += o * attach * EXP_PRICE * f if t >= 2 else 0
-        tot += v / (1 + R) ** (t - 1)
-    return tot
+    attributed = pv_build + pv_live - reuse
+    return dict(case=c, rows=rows, f=f, steam_fee=fee["steam"], net_per_copy=price * (1 - sum(MIX[p] * fee[p] for p in MIX)),
+                pv_rev=pv_rev, pv_live=pv_live, nominal=nominal, dated=dated, reuse=reuse,
+                pv_build=pv_build, attributed=attributed, npv=pv_rev - attributed,
+                multiple=pv_rev / attributed)
 
 
 def solve_copies(template: Case, target_multiple):
-    lo, hi = 0.5, 80.0
+    lo, hi = 0.3, 80.0
     for _ in range(80):
         mid = (lo + hi) / 2
-        r = run(replace(template, copies=mid))
-        if r["multiple"] < target_multiple:
+        if run(replace(template, copies=mid))["multiple"] < target_multiple:
             lo = mid
         else:
             hi = mid
@@ -200,18 +197,18 @@ def solve_copies(template: Case, target_multiple):
 
 
 CASES = {
-    "Failure":   Case("Failure", 1.0, 3.0, 0.05),
-    "Downside":  Case("Downside", 3.0, 4.0, 0.10),
-    "Base":      Case("Base", 8.0, 8.0, 0.20),
-    "Breakout":  Case("Breakout", 15.4, 15.0, 0.30),   # mean of HD2, ARC Raiders, DRG
-    "Target":    Case("Target", 20.0, 15.0, 0.30),
+    "Failure":  Case("Failure", 1.0, 3.0, 0.05),
+    "Downside": Case("Downside", 3.0, 4.0, 0.10),
+    "Base":     Case("Base", 8.0, 8.0, 0.20),
+    "Breakout": Case("Breakout", 15.4, 15.0, 0.30),   # mean of Helldivers 2, ARC Raiders, DRG
+    "Target":   Case("Target", 20.0, 15.0, 0.30),
 }
 
 # Reference classes from Appendix C
 REF_ALL = {"Failure": 8 / 14, "Downside": 2 / 14, "Base": 1 / 14, "Breakout": 3 / 14}
-# Titles matching the draft's winners' pattern: squad-built, $30-60, one core loop
-# (Helldivers 2, ARC Raiders, Deep Rock Galactic, Space Marine 2, Remnant 2, Marathon, Payday 3)
 REF_PATTERN = {"Failure": 1 / 7, "Downside": 2 / 7, "Base": 1 / 7, "Breakout": 3 / 7}
+
+EDITIONS = (BATTLEFRONT, THEATER)
 
 
 def m(x):
@@ -222,108 +219,126 @@ def report():
     out = []
     P = out.append
 
-    P("## Reconciliation with the draft's Appendix A\n")
-    P("| Case | Draft PV ($M) | Draft PV per copy ($) |")
+    P("## Budget by edition (nominal, $M)\n")
+    P("| | Battlefront ($50) | Theater ($60) |")
     P("| --- | --- | --- |")
-    for k in ("Downside", "Base", "Target"):
-        c = CASES[k]
-        d = draft_pv(c.copies, c.spend, c.attach)
-        P(f"| {k} | {m(d)} | {d / c.copies:.2f} |")
-
-    P("\n## Program cost, Core scale, Base case, consolidated view, mode ladder\n")
-    r = run(replace(CASES["Base"], game_pass=True))
-    P("| $ millions | Nominal | Dated to launch at 10% |")
-    P("| --- | --- | --- |")
+    rs = {e.name: run(replace(CASES["Base"], edition=e)) for e in EDITIONS}
     for k in ("Preproduction", "Production", "Marketing"):
-        P(f"| {k} | {m(r['nominal'][k])} | {m(r['dated'][k])} |")
-    P(f"| Build and launch subtotal | {m(sum(r['nominal'].values()))} | {m(r['pv_build'])} |")
-    nom_live = sum(x['live_cost'] for x in r['rows'])
-    P(f"| Live operations, years 1-5 | {m(nom_live)} | {m(r['pv_live'])} |")
-    P(f"| Franchise reuse credit | -{m(REUSE_CREDIT)} | -{m(REUSE_CREDIT)} |")
-    P(f"| Program cost attributed to REDACTED | {m(sum(r['nominal'].values()) + nom_live - REUSE_CREDIT)} | {m(r['attributed'])} |")
+        P(f"| {k} | " + " | ".join(m(rs[e.name]['nominal'][k]) for e in EDITIONS) + " |")
+    P("| Development through launch | " + " | ".join(m(rs[e.name]['nominal']['Preproduction'] + rs[e.name]['nominal']['Production']) for e in EDITIONS) + " |")
+    P("| First live year, Base case | " + " | ".join(m(rs[e.name]['rows'][0]['live_cost']) for e in EDITIONS) + " |")
+    P("| Launch plus first live year | " + " | ".join(m(sum(rs[e.name]['nominal'].values()) + rs[e.name]['rows'][0]['live_cost']) for e in EDITIONS) + " |")
+    P("| Franchise reuse credit | " + " | ".join(f"-{m(rs[e.name]['reuse'])}" for e in EDITIONS) + " |")
 
-    for view, xf in (("consolidated Microsoft view (Xbox store fee 0%)", 0.0),
-                     ("Activision view (Xbox store fee 30%)", 0.30)):
-        P(f"\n## Returns by case, {view}, Game Pass after year one, mode ladder\n")
-        P("| Case | Copies | Steam fee | Net share f | Net per copy | PV revenue | PV program cost | NPV | Multiple |")
-        P("| --- | --- | --- | --- | --- | --- | --- | --- | --- |")
-        for k, c in CASES.items():
-            rr = run(replace(c, xbox_fee=xf, game_pass=True))
-            npc = PRICE * rr["f"]
-            P(f"| {k} | {c.copies:g}M | {rr['steam_fee']:.1%} | {rr['f']:.3f} | ${npc:.2f} | {m(rr['pv_rev'])} | "
-              f"{m(rr['attributed'])} | {m(rr['npv'])} | {rr['multiple']:.2f}x |")
-
-    P("\n## Live operations by year, Base case, consolidated, Game Pass, ladder\n")
-    P("| Year | Owners (M) | Game Pass players (M) | Active (M) | Mode | Live revenue | Live cost | Break-even owners (M) |")
-    P("| --- | --- | --- | --- | --- | --- | --- | --- |")
-    for x in r["rows"]:
-        P(f"| {x['t']} | {x['owners']:.2f} | {x['gp']:.2f} | {x['active']:.2f} | {x['mode']} | {m(x['live_rev'])} | {m(x['live_cost'])} | {x['breakeven_owners']:.2f} |")
-
-    P("\n## Mode by year across cases (consolidated, Game Pass, ladder)\n")
-    P("| Case | Y1 | Y2 | Y3 | Y4 | Y5 | PV live cost | PV live cost, Mode 1 fixed |")
-    P("| --- | --- | --- | --- | --- | --- | --- | --- |")
-    for k, c in CASES.items():
-        a = run(replace(c, game_pass=True))
-        b = run(replace(c, game_pass=True, ladder=False))
-        P(f"| {k} | " + " | ".join(str(x['mode']) for x in a['rows']) + f" | {m(a['pv_live'])} | {m(b['pv_live'])} |")
-
-    P("\n## Sensitivities, Base case, consolidated\n")
-    P("| Variant | PV revenue | PV program cost | NPV | Multiple |")
+    P("\n## Program cost, Base case, dated to launch ($M)\n")
+    P("| | Battlefront nominal | Battlefront dated | Theater nominal | Theater dated |")
     P("| --- | --- | --- | --- | --- |")
+    for k in ("Preproduction", "Production", "Marketing"):
+        P(f"| {k} | " + " | ".join(f"{m(rs[e.name]['nominal'][k])} | {m(rs[e.name]['dated'][k])}" for e in EDITIONS) + " |")
+    P("| Live operations, years 1-5 | " + " | ".join(f"{m(sum(x['live_cost'] for x in rs[e.name]['rows']))} | {m(rs[e.name]['pv_live'])}" for e in EDITIONS) + " |")
+    P("| Franchise reuse credit | " + " | ".join(f"-{m(rs[e.name]['reuse'])} | -{m(rs[e.name]['reuse'])}" for e in EDITIONS) + " |")
+    P("| Program cost | " + " | ".join(f"{m(sum(rs[e.name]['nominal'].values()) + sum(x['live_cost'] for x in rs[e.name]['rows']) - rs[e.name]['reuse'])} | {m(rs[e.name]['attributed'])}" for e in EDITIONS) + " |")
+
+    for view, xf in (("Microsoft view (Xbox store fee 0%)", 0.0), ("Activision view (Xbox store fee 30%)", 0.30)):
+        P(f"\n## Returns by case, {view}\n")
+        P("| Case | Copies | Edition | Net per copy | PV revenue | Program cost | NPV | Multiple |")
+        P("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        for k, c in CASES.items():
+            for e in EDITIONS:
+                r = run(replace(c, edition=e, xbox_fee=xf))
+                P(f"| {k} | {c.copies:g}M | {e.name} | ${r['net_per_copy']:.2f} | {m(r['pv_rev'])} | {m(r['attributed'])} | {m(r['npv'])} | {r['multiple']:.2f}x |")
+
+    for e in EDITIONS:
+        r = run(replace(CASES["Base"], edition=e))
+        P(f"\n## Live operations by year, Base case, {e.name} edition\n")
+        P("| Year | Owners (M) | Game Pass players (M) | Active (M) | Mode | Live revenue | Live cost | Break-even owners (M) |")
+        P("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        for x in r["rows"]:
+            P(f"| {x['t']} | {x['owners']:.2f} | {x['gp']:.2f} | {x['active']:.2f} | {x['mode']} | {m(x['live_rev'])} | {m(x['live_cost'])} | {x['breakeven_owners']:.2f} |")
+
+    P("\n## Mode by year and live cost (PV, $M)\n")
+    P("| Case | Edition | Y1 | Y2 | Y3 | Y4 | Y5 | PV live cost | PV live cost, Mode 1 held |")
+    P("| --- | --- | --- | --- | --- | --- | --- | --- | --- |")
+    for k, c in CASES.items():
+        for e in EDITIONS:
+            a = run(replace(c, edition=e))
+            b = run(replace(c, edition=e, ladder=False))
+            P(f"| {k} | {e.name} | " + " | ".join(str(x['mode']) for x in a['rows']) + f" | {m(a['pv_live'])} | {m(b['pv_live'])} |")
+
+    P("\n## Sensitivities, Base case (NPV $M / multiple)\n")
+    P("| Variant | Battlefront | Theater |")
+    P("| --- | --- | --- |")
     variants = [
-        ("As modeled (Game Pass, ladder)", replace(CASES["Base"], game_pass=True)),
-        ("No Game Pass", CASES["Base"]),
-        ("Mode 1 held all five years", replace(CASES["Base"], game_pass=True, ladder=False)),
-        ("Agent savings not realized (+$12M dev, +$7M marketing)", replace(CASES["Base"], game_pass=True, dev_extra=12.0)),
-        ("Activision view (Xbox fee 30%)", replace(CASES["Base"], game_pass=True, xbox_fee=0.30)),
+        ("As modeled", {}),
+        ("No Game Pass", {"game_pass": False}),
+        ("Mode 1 held all five years", {"ladder": False}),
+        ("Agent savings not realized", {"dev_extra": None}),
+        ("Activision view (Xbox fee 30%)", {"xbox_fee": 0.30}),
     ]
-    for label, c in variants:
-        rr = run(c)
-        P(f"| {label} | {m(rr['pv_rev'])} | {m(rr['attributed'])} | {m(rr['npv'])} | {rr['multiple']:.2f}x |")
-
-    P("\n## Copies needed (Base-case spend and attach, consolidated, Game Pass, ladder)\n")
-    P("| Threshold | Draft | v2 consolidated | v2 Activision view |")
-    P("| --- | --- | --- | --- |")
-    base = replace(CASES["Base"], game_pass=True)
-    act = replace(base, xbox_fee=0.30)
-    P(f"| Payback (1.0x) | 7.1M | {solve_copies(base, 1.0):.1f}M | {solve_copies(act, 1.0):.1f}M |")
-    P(f"| 1.5x return | 10.6M | {solve_copies(base, 1.5):.1f}M | {solve_copies(act, 1.5):.1f}M |")
-    tgt = replace(CASES["Target"], game_pass=True)
-    P(f"| Payback at Target-case spend and attach | - | {solve_copies(tgt, 1.0):.1f}M | {solve_copies(replace(tgt, xbox_fee=.3), 1.0):.1f}M |")
-    P(f"| 1.5x at Target-case spend and attach | - | {solve_copies(tgt, 1.5):.1f}M | {solve_copies(replace(tgt, xbox_fee=.3), 1.5):.1f}M |")
-
-    P("\n## Reference-class expected value (consolidated, Game Pass, ladder)\n")
-    npv = {k: run(replace(c, game_pass=True))["npv"] for k, c in CASES.items()}
-    pre_dated = run(replace(CASES["Base"], game_pass=True))["dated"]["Preproduction"]
-    for label, ref in (("All 14 comparables", REF_ALL), ("7 titles on the winners' pattern", REF_PATTERN)):
-        ev = sum(p * npv[k] for k, p in ref.items())
-        # production-stage NPV excludes preproduction, which is sunk at Gate 3
-        ev_prod = sum(p * (npv[k] + pre_dated) for k, p in ref.items())
-        P(f"- **{label}:** " + ", ".join(f"{k} {p:.0%}" for k, p in ref.items())
-          + f" -> E[NPV] = ${m(ev)}M; E[NPV of production | Gate 3] = ${m(ev_prod)}M.")
-    P("\n## Preproduction option: required gate quality\n")
-    P("Good = Breakout; bad = every other case. eta = P(pass Gate 3 | good), eps = P(pass Gate 3 | bad).\n")
-    P("| Reference class | P(good) | E[production NPV / good] | E[production NPV / bad] | Max eps at eta = 0.8 | Max eps at eta = 0.6 |")
-    P("| --- | --- | --- | --- | --- | --- |")
-    for label, ref in (("All 14 comparables", REF_ALL), ("Winners' pattern (7)", REF_PATTERN)):
-        pg = ref["Breakout"]
-        g = npv["Breakout"] + pre_dated
-        bad = {k: p for k, p in ref.items() if k != "Breakout"}
-        pb = sum(bad.values())
-        b = sum(p * (npv[k] + pre_dated) for k, p in bad.items()) / pb
+    for label, kw in variants:
         cells = []
-        for eta in (0.8, 0.6):
-            eps = (pg * eta * g - pre_dated) / (pb * -b)
-            cells.append(f"{max(0, min(1, eps)):.2f}")
-        P(f"| {label} | {pg:.2f} | {m(g)} | {m(b)} | " + " | ".join(cells) + " |")
-    P(f"\nCase NPVs used: " + ", ".join(f"{k} ${m(v)}M" for k, v in npv.items())
-      + f". Preproduction dated to launch: ${m(pre_dated)}M.")
-    P("\n## Copies needed to pay back, by year-one spend per owner and attach rate (consolidated, Game Pass, ladder)\n")
+        for e in EDITIONS:
+            kw2 = dict(kw)
+            if "dev_extra" in kw2:
+                kw2["dev_extra"] = e.production() * AGENT_SAVING / (1 - AGENT_SAVING) + 34 * AGENT_SAVING
+            r = run(replace(CASES["Base"], edition=e, **kw2))
+            cells.append(f"{m(r['npv'])} / {r['multiple']:.2f}x")
+        P(f"| {label} | " + " | ".join(cells) + " |")
+
+    P("\n## Copies needed\n")
+    P("| Threshold | Spend | Battlefront, Microsoft | Theater, Microsoft | Battlefront, Activision | Theater, Activision |")
+    P("| --- | --- | --- | --- | --- | --- |")
+    for mult in (1.0, 1.5):
+        for label, c in (("Base", CASES["Base"]), ("Target", CASES["Target"])):
+            cells = [f"{solve_copies(replace(c, edition=e, xbox_fee=xf), mult):.1f}M" for xf in (0.0, 0.30) for e in EDITIONS]
+            P(f"| {mult:.1f}x | {label} | " + " | ".join(cells) + " |")
+
+    P("\n## Copies needed to pay back, by spend per owner and attach (Microsoft view)\n")
     atts = (0.10, 0.20, 0.30)
-    P("| Spend per owner, year one | " + " | ".join(f"Attach {a:.0%}" for a in atts) + " |")
+    for e in EDITIONS:
+        P(f"\n{e.name} edition\n")
+        P("| Spend per owner, year one | " + " | ".join(f"Attach {a:.0%}" for a in atts) + " |")
+        P("| --- | --- | --- | --- |")
+        for sp in (4, 8, 12, 15, 20):
+            P(f"| ${sp} | " + " | ".join(f"{solve_copies(Case('g', 8, sp, a, edition=e), 1.0):.1f}M" for a in atts) + " |")
+
+    P("\n## Price indifference (Base spend and attach, Microsoft view)\n")
+    P("Copies the higher price can sell and still match the NPV of the lower price at the stated copies.\n")
+    P("| Comparison | At 8M copies | At 15.4M copies | Copy loss the higher price can absorb |")
     P("| --- | --- | --- | --- |")
-    for sp in (4, 8, 12, 15, 20):
-        P(f"| ${sp} | " + " | ".join(f"{solve_copies(Case('g', 8, sp, a, game_pass=True), 1.0):.1f}M" for a in atts) + " |")
+    bf40 = replace(BATTLEFRONT, name="Battlefront at $40", list_price=40.0)
+    pairs = (("$50 Battlefront vs $40 Battlefront", bf40, BATTLEFRONT),
+             ("$60 Theater vs $50 Battlefront", BATTLEFRONT, THEATER))
+    for label, lo_e, hi_e in pairs:
+        cells = []
+        for n0 in (8.0, 15.4):
+            target = run(replace(CASES["Base"], copies=n0, edition=lo_e))["npv"]
+            a, b = 0.3, n0
+            for _ in range(80):
+                mid = (a + b) / 2
+                if run(replace(CASES["Base"], copies=mid, edition=hi_e))["npv"] < target:
+                    a = mid
+                else:
+                    b = mid
+            cells.append((b, 1 - b / n0))
+        P(f"| {label} | {cells[0][0]:.1f}M | {cells[1][0]:.1f}M | {cells[0][1]:.0%} / {cells[1][1]:.0%} |")
+
+    P("\n## Reference-class expected value and the preproduction option (Microsoft view)\n")
+    for e in EDITIONS:
+        npv = {k: run(replace(c, edition=e))["npv"] for k, c in CASES.items()}
+        pre = run(replace(CASES["Base"], edition=e))["dated"]["Preproduction"]
+        P(f"\n{e.name} edition. Case NPVs: " + ", ".join(f"{k} {m(v)}" for k, v in npv.items()) + f". Preproduction dated: {m(pre)}.\n")
+        P("| Reference class | E[NPV] | P(breakout) | E[production NPV / breakout] | E[production NPV / other] | Max eps, eta 0.8 | Max eps, eta 0.6 |")
+        P("| --- | --- | --- | --- | --- | --- | --- |")
+        for label, ref in (("All 14 comparables", REF_ALL), ("Winners' pattern (7)", REF_PATTERN)):
+            ev = sum(p * npv[k] for k, p in ref.items())
+            pg = ref["Breakout"]
+            g = npv["Breakout"] + pre
+            bad = {k: p for k, p in ref.items() if k != "Breakout"}
+            pb = sum(bad.values())
+            b = sum(p * (npv[k] + pre) for k, p in bad.items()) / pb
+            eps = [max(0, min(1, (pg * eta * g - pre) / (pb * -b))) for eta in (0.8, 0.6)]
+            P(f"| {label} | {m(ev)} | {pg:.2f} | {m(g)} | {m(b)} | {eps[0]:.2f} | {eps[1]:.2f} |")
     return "\n".join(out)
 
 

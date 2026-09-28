@@ -1,59 +1,69 @@
-# Draft 2 changes and open decisions
+# Working notes (not part of the proposal)
 
 ## Files
 
-- `Halo_REDACTED_Harvest_v1.md` — draft 1, unchanged.
-- `Halo_REDACTED_Harvest_v2.md` — draft 2.
-- `redacted_model.py` — program model; `python3 redacted_model.py` regenerates `model_output.md`.
-- `model_output.md` — every table the draft 2 figures come from.
+- `Halo_REDACTED_Harvest_v1.md`: the original proposal, unchanged.
+- `Halo_REDACTED_Harvest_v3.md`: the current proposal.
+- `redacted_model.py`: the program model. Running `python3 redacted_model.py` regenerates `model_output.md`.
+- `model_output.md`: every table the proposal's figures come from.
 
-## Financial model
+## Current revision
 
-| Change | Effect on Base case (8M copies) |
-| --- | --- |
-| Live years 2–5 added, with the five-mode ladder and servers scaled to active population | Program cost $334M → $446M; 1.13× → 0.85× |
-| Development and marketing compounded forward to launch at 10% | $446M → $483M; 0.85× → 0.78× |
-| Game Pass after year one; Steam's tier computed per case | PV revenue $379M → $371M; 0.78× → 0.77× |
-| Xbox store fee shown in two views (Microsoft 0%, Activision 30%) | Activision view 0.70× |
-| Breakout case added (mean of Helldivers 2, ARC Raiders, Deep Rock Galactic: 15.4M) | NPV $380M, 1.66× |
-| Failure case added (1M copies) for the reference-class weighting | NPV −$333M |
+- **Correction trail removed.** No draft labels, no reconciliation with earlier versions, and no "the draft's" references in the proposal. The model reports only current figures.
+- **Two editions.**
+  - Battlefront edition, $50: Strike Ops, 64-player Battlefronts with the Halo vehicle roster, Invasions, Eras I–IV, Map and Mission Forge.
+  - Theater edition, $60: adds one Grand Theater region.
+  - Grand Theaters are optional, decided at Gate 2 by a technical test and an early price test. If they fail, they become a post-launch expansion.
+  - Battlefronts and Invasions are positioned as the substantive extension of the Helldivers formula. Space Marine 2 ($60) is added as the price comparable.
+- **Engine: Unreal Engine 5,** on Halo Studios' Project Foundry pipeline that shipped Halo: Campaign Evolved (July 28, 2026). Evidence cited:
+  - ARC Raiders is built on Unreal Engine 5.
+  - Squad runs 100-player combined arms on Unreal Engine 5.5.
+  - Call of Duty uses a proprietary engine.
+  - Activision has not named an engine for the Master Chief game, so the reuse credit is split: assets carry to any engine, while engine work and tools carry only if that game also uses Unreal Engine 5.
+- **Mode ladder changes.**
+  - Each mode now retains a share of spend and expansion attach (ρ).
+  - The ladder picks the mode with the best live margin. Without ρ, a fuller mode only added cost, which made the copies-needed grid non-monotonic.
+- **Price indifference analysis added:**
+  - $50 vs $40: the $50 price holds its value unless it loses more than 14–15% of copies.
+  - $60 Theater vs $50 Battlefront: the $10 step only pays for Grand Theaters, so the Theater edition has to sell at least as many copies (0–2% loss absorbable).
 
-Headline movements: payback 7.1M → 11.8M copies (Base spend) / 8.4M (Target spend); 1.5× line 10.6M → 19.5M / 13.6M; Target 3.7× → 2.0×.
+## Headline figures (Microsoft view)
 
-New analysis: the copies-to-pay-back grid by spend and attach; reference-class expected NPV (−$157M all 14, +$20M winners' pattern); the gate-quality condition for the preproduction option (η, ε).
+| | Battlefront $50 | Theater $60 |
+| --- | --- | --- |
+| Development through launch | $170M | $195M |
+| Program cost, Base, dated | $365M | $422M |
+| Base NPV (8M copies) | −$1M, 1.00× | −$8M, 0.98× |
+| Breakout NPV (15.4M) | $560M, 2.14× | $574M, 2.03× |
+| Target NPV (20M) | $849M, 2.65× | $881M, 2.45× |
+| Copies to pay back, Base / Target spend | 8.0M / 6.2M | 8.2M / 6.6M |
 
-## Text
+## Assumptions to confirm or replace
 
-- Executive summary: "$195M production" corrected (production is $161M; $195M is development including preproduction); numbers table rebuilt; "Master Cheeks" and sex-scene detail moved out of the summary (kept in the body); the right-tail framing and spend-per-owner lever added.
-- Campaign Evolved: now reported as ~3.3M players (1.2M sold + 2.1M Game Pass); no longer used as evidence of fatigue. ODST remains the Chief-free precedent.
-- Broken bold markup fixed ("It holds up when players leave and expands when they come back").
-- Mode ladder turned into a table with team size and server factor per mode.
-- Self-funding condition rewritten with mode costs and a year-by-year Base table.
-- New paragraph: Halo Foundation / REDACTED / Master Chief team structure and sequencing.
-- Business model: net per copy in both views; Game Pass assumptions stated.
-- Headcounts labeled as averages (preproduction ~86 implied by tranches; production average 260, peak 330).
-- Helldivers 2 105-person team: inline citation added (Yahoo article verified: "105 at release in February 2024").
-- Gates: Gate 2 adds the Grand Theater fallback and a measured agent-savings criterion; Gate 3 adds a closed external test and a demand model placing the median outcome at NPV ≥ 0. Preproduction studies go from seven to eight (spend per owner added).
-- Risk table: rows added for spend per owner and for scope and schedule; team capacity now covers the Master Chief game.
-- Appendix A: full v2 formulas (revenue, dated cost, mode ladder, NPV) and a reconciliation waterfall from draft 1.
-- Appendix B: agent-savings measurement note.
-- Appendix C: "winners' pattern" column and case mapping.
-- Appendix E: rewritten as a coupled linear system with an eigenvalue condition (surge vs. see-saw).
+1. **Copies held equal across prices** in every case. Price elasticity is the demand study's job; the price-indifference table gives the tolerance.
+2. **Realized price** is 87.5% of list at $50 and $60, the same ratio as Helldivers 2 at $40.
+3. **Battlefront edition cost:** production 220 people, cost pro rata ($136M); live team 160 / 115 / 80 / 40 / 8 by mode; servers at 75% of the Theater rate per active owner.
+4. **Mode revenue retention ρ:** 1.00 / 0.92 / 0.80 / 0.60 / 0.30. The Base case runs Mode 4 from year two because of these values; Breakout holds Mode 1.
+5. **Mode team sizes (Theater):** 180 / 130 / 90 / 45 / 8. Server factors: 1.0 / 0.9 / 0.8 / 0.6 / 0.2.
+6. **Server rate:** $4.09 per active owner-year for Theater, $3.07 for Battlefront.
+7. **Engagement decay** equals the 30% spend decay.
+8. **Marketing timing:** 15% in months 24–36, 35% in months 36–48, 50% in the launch year.
+9. **Game Pass:** Xbox copies after year one are halved; Game Pass players equal Xbox's year-one buyers, and they spend and attach at half rate; no subscription value is credited.
+10. **Failure case:** 1M copies, $3 spend per owner, 5% attach.
+11. **Team structure:** Foundation / REDACTED / Master Chief teams, with Chief preproduction starting around month 24.
 
-## Assumptions of mine you should confirm or replace
+## Still open from the simulated committee reading
 
-1. **Mode ladder parameters:** team sizes 180 / 130 / 90 / 45 / 8, server factors 1.0 / 0.9 / 0.8 / 0.6 / 0.2.
-2. **Server rate** $4.09 per active owner-year, calibrated from draft 1's $18M at Base year-one activity. This makes Target-case year-one servers ~$45M.
-3. **Engagement decay** equal to the 30% spend decay.
-4. **Marketing timing:** 15% months 24–36, 35% months 36–48, 50% launch year.
-5. **Game Pass:** 50% of year-2+ Xbox copies lost; Game Pass players equal to Xbox year-one buyers; they spend and attach at half an owner's rate; no subscription value credited.
-6. **Failure case:** 1M copies, $3 spend, 5% attach.
-7. **Team structure** (Foundation / REDACTED / Master Chief, Chief preproduction at month 24, Chief launch ≥ 1 year after REDACTED). This is a structural choice, not a model output.
-8. **Gate 3 criterion "median outcome at NPV ≥ 0":** this is a demanding bar given Base is −$114M; the alternative is to state the criterion as an η/ε target for the gates.
+- The labour rate and contingency benchmark are derived from hacked Insomniac files (Kotaku). Re-derive them from public sources before circulating.
+- Tone pass on the Master Chief section and the phrase "military industrial fantasy".
+- A Spartan scale rule, so that 64-player Battlefronts are not full of Spartan-IIs.
+- A central forecast, and how REDACTED compares with Marathon.
+- Gate 1 and 2 criteria strong enough to reject failures (ε ≤ 0.37 against all 14 comparables).
 
 ## Charts to update
 
-- Lifetime copies chart: replace the single 10.6M REDACTED line with payback lines at 11.8M and 8.4M.
-- Ceiling sheet chart → Returns sheet (NPV by case, program cost including live years).
-- Risk map: 8 → 10 risks.
-- Budget sheet caption: live years one to five.
+- Lifetime copies chart: payback lines at 8.0M and 6.2M (Battlefront edition).
+- War simulation diagram: Strike Ops and Battlefronts, with Grand Theaters as the optional scale.
+- Returns sheet: NPV by case and edition.
+- Risk map: 12 risks.
+- Budget sheet: both editions.

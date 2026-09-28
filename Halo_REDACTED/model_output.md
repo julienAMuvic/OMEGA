@@ -1,104 +1,155 @@
-## Reconciliation with the draft's Appendix A
+## Budget by edition (nominal, $M)
 
-| Case | Draft PV ($M) | Draft PV per copy ($) |
+| | Battlefront ($50) | Theater ($60) |
 | --- | --- | --- |
-| Downside | 111 | 36.92 |
-| Base | 379 | 47.37 |
-| Target | 1,244 | 62.22 |
+| Preproduction | 34 | 34 |
+| Production | 136 | 161 |
+| Marketing | 102 | 117 |
+| Development through launch | 170 | 195 |
+| First live year, Base case | 43 | 51 |
+| Launch plus first live year | 315 | 363 |
+| Franchise reuse credit | -26 | -29 |
 
-## Program cost, Core scale, Base case, consolidated view, mode ladder
+## Program cost, Base case, dated to launch ($M)
 
-| $ millions | Nominal | Dated to launch at 10% |
-| --- | --- | --- |
-| Preproduction | 34 | 46 |
-| Production | 161 | 182 |
-| Marketing | 117 | 122 |
-| Build and launch subtotal | 312 | 349 |
-| Live operations, years 1-5 | 193 | 164 |
-| Franchise reuse credit | -29 | -29 |
-| Program cost attributed to REDACTED | 476 | 485 |
+| | Battlefront nominal | Battlefront dated | Theater nominal | Theater dated |
+| --- | --- | --- | --- | --- |
+| Preproduction | 34 | 46 | 34 | 46 |
+| Production | 136 | 154 | 161 | 182 |
+| Marketing | 102 | 106 | 117 | 122 |
+| Live operations, years 1-5 | 95 | 85 | 115 | 102 |
+| Franchise reuse credit | -26 | -26 | -29 | -29 |
+| Program cost | 342 | 365 | 398 | 422 |
 
-## Returns by case, consolidated Microsoft view (Xbox store fee 0%), Game Pass after year one, mode ladder
+## Returns by case, Microsoft view (Xbox store fee 0%)
 
-| Case | Copies | Steam fee | Net share f | Net per copy | PV revenue | PV program cost | NPV | Multiple |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Failure | 1M | 27.2% | 0.789 | $27.61 | 28 | 361 | -333 | 0.08x |
-| Downside | 3M | 23.9% | 0.805 | $28.19 | 91 | 368 | -277 | 0.25x |
-| Base | 8M | 21.1% | 0.819 | $28.68 | 371 | 485 | -114 | 0.77x |
-| Breakout | 15.4M | 20.4% | 0.823 | $28.80 | 953 | 574 | 380 | 1.66x |
-| Target | 20M | 20.3% | 0.823 | $28.82 | 1,238 | 608 | 630 | 2.04x |
+| Case | Copies | Edition | Net per copy | PV revenue | Program cost | NPV | Multiple |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Failure | 1M | Battlefront | $34.59 | 32 | 317 | -285 | 0.10x |
+| Failure | 1M | Theater | $41.58 | 38 | 361 | -323 | 0.11x |
+| Downside | 3M | Battlefront | $35.36 | 101 | 322 | -221 | 0.31x |
+| Downside | 3M | Theater | $42.54 | 120 | 368 | -248 | 0.33x |
+| Base | 8M | Battlefront | $35.88 | 364 | 365 | -1 | 1.00x |
+| Base | 8M | Theater | $43.08 | 414 | 422 | -8 | 0.98x |
+| Breakout | 15.4M | Battlefront | $36.01 | 1,050 | 489 | 560 | 2.14x |
+| Breakout | 15.4M | Theater | $43.22 | 1,131 | 557 | 574 | 2.03x |
+| Target | 20M | Battlefront | $36.03 | 1,364 | 515 | 849 | 2.65x |
+| Target | 20M | Theater | $43.24 | 1,489 | 608 | 881 | 2.45x |
 
-## Returns by case, Activision view (Xbox store fee 30%), Game Pass after year one, mode ladder
+## Returns by case, Activision view (Xbox store fee 30%)
 
-| Case | Copies | Steam fee | Net share f | Net per copy | PV revenue | PV program cost | NPV | Multiple |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Failure | 1M | 27.2% | 0.714 | $24.99 | 26 | 361 | -335 | 0.07x |
-| Downside | 3M | 23.9% | 0.730 | $25.56 | 84 | 368 | -284 | 0.23x |
-| Base | 8M | 21.1% | 0.744 | $26.05 | 340 | 485 | -145 | 0.70x |
-| Breakout | 15.4M | 20.4% | 0.748 | $26.17 | 871 | 574 | 298 | 1.52x |
-| Target | 20M | 20.3% | 0.748 | $26.19 | 1,133 | 608 | 524 | 1.86x |
+| Case | Copies | Edition | Net per copy | PV revenue | Program cost | NPV | Multiple |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Failure | 1M | Battlefront | $31.31 | 30 | 317 | -287 | 0.09x |
+| Failure | 1M | Theater | $37.64 | 35 | 361 | -326 | 0.10x |
+| Downside | 3M | Battlefront | $32.08 | 93 | 322 | -229 | 0.29x |
+| Downside | 3M | Theater | $38.61 | 110 | 368 | -257 | 0.30x |
+| Base | 8M | Battlefront | $32.59 | 334 | 365 | -31 | 0.91x |
+| Base | 8M | Theater | $39.14 | 380 | 422 | -42 | 0.90x |
+| Breakout | 15.4M | Battlefront | $32.73 | 954 | 483 | 471 | 1.98x |
+| Breakout | 15.4M | Theater | $39.28 | 1,016 | 536 | 480 | 1.89x |
+| Target | 20M | Battlefront | $32.75 | 1,248 | 515 | 733 | 2.42x |
+| Target | 20M | Theater | $39.30 | 1,364 | 608 | 756 | 2.24x |
 
-## Live operations by year, Base case, consolidated, Game Pass, ladder
+## Live operations by year, Base case, Battlefront edition
 
 | Year | Owners (M) | Game Pass players (M) | Active (M) | Mode | Live revenue | Live cost | Break-even owners (M) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | 4.40 | 0.00 | 4.40 | 1 | 29 | 51 | 7.78 |
-| 2 | 5.80 | 1.10 | 4.45 | 2 | 50 | 40 | 5.11 |
-| 3 | 6.64 | 1.10 | 3.52 | 2 | 47 | 37 | 5.67 |
-| 4 | 7.20 | 1.10 | 2.66 | 2 | 43 | 34 | 6.08 |
-| 5 | 7.55 | 1.10 | 1.94 | 2 | 39 | 31 | 6.39 |
+| 1 | 4.40 | 0.00 | 4.40 | 1 | 29 | 43 | 6.53 |
+| 2 | 5.80 | 1.10 | 4.45 | 4 | 30 | 16 | 3.28 |
+| 3 | 6.64 | 1.10 | 3.52 | 4 | 28 | 14 | 3.55 |
+| 4 | 7.20 | 1.10 | 2.66 | 4 | 26 | 12 | 3.68 |
+| 5 | 7.55 | 1.10 | 1.94 | 4 | 24 | 11 | 3.75 |
 
-## Mode by year across cases (consolidated, Game Pass, ladder)
+## Live operations by year, Base case, Theater edition
 
-| Case | Y1 | Y2 | Y3 | Y4 | Y5 | PV live cost | PV live cost, Mode 1 fixed |
+| Year | Owners (M) | Game Pass players (M) | Active (M) | Mode | Live revenue | Live cost | Break-even owners (M) |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Failure | 1 | 5 | 5 | 5 | 5 | 41 | 145 |
-| Downside | 1 | 5 | 5 | 5 | 5 | 48 | 160 |
-| Base | 1 | 2 | 2 | 2 | 2 | 164 | 198 |
-| Breakout | 1 | 1 | 1 | 1 | 1 | 253 | 253 |
-| Target | 1 | 1 | 1 | 1 | 1 | 288 | 288 |
+| 1 | 4.40 | 0.00 | 4.40 | 1 | 29 | 51 | 7.77 |
+| 2 | 5.80 | 1.10 | 4.45 | 4 | 30 | 19 | 4.05 |
+| 3 | 6.64 | 1.10 | 3.52 | 4 | 28 | 17 | 4.33 |
+| 4 | 7.20 | 1.10 | 2.66 | 4 | 26 | 15 | 4.45 |
+| 5 | 7.55 | 1.10 | 1.94 | 4 | 24 | 13 | 4.47 |
 
-## Sensitivities, Base case, consolidated
+## Mode by year and live cost (PV, $M)
 
-| Variant | PV revenue | PV program cost | NPV | Multiple |
-| --- | --- | --- | --- | --- |
-| As modeled (Game Pass, ladder) | 371 | 485 | -114 | 0.77x |
-| No Game Pass | 379 | 483 | -104 | 0.78x |
-| Mode 1 held all five years | 371 | 518 | -147 | 0.72x |
-| Agent savings not realized (+$12M dev, +$7M marketing) | 371 | 506 | -135 | 0.73x |
-| Activision view (Xbox fee 30%) | 340 | 485 | -145 | 0.70x |
+| Case | Edition | Y1 | Y2 | Y3 | Y4 | Y5 | PV live cost | PV live cost, Mode 1 held |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Failure | Battlefront | 1 | 5 | 5 | 5 | 5 | 36 | 128 |
+| Failure | Theater | 1 | 5 | 5 | 5 | 5 | 41 | 145 |
+| Downside | Battlefront | 1 | 5 | 5 | 5 | 5 | 41 | 139 |
+| Downside | Theater | 1 | 5 | 5 | 5 | 5 | 48 | 160 |
+| Base | Battlefront | 1 | 4 | 4 | 4 | 4 | 85 | 167 |
+| Base | Theater | 1 | 4 | 4 | 4 | 4 | 102 | 198 |
+| Breakout | Battlefront | 1 | 1 | 1 | 1 | 1 | 209 | 209 |
+| Breakout | Theater | 1 | 1 | 1 | 2 | 2 | 237 | 253 |
+| Target | Battlefront | 1 | 1 | 1 | 1 | 1 | 235 | 235 |
+| Target | Theater | 1 | 1 | 1 | 1 | 1 | 288 | 288 |
 
-## Copies needed (Base-case spend and attach, consolidated, Game Pass, ladder)
+## Sensitivities, Base case (NPV $M / multiple)
 
-| Threshold | Draft | v2 consolidated | v2 Activision view |
-| --- | --- | --- | --- |
-| Payback (1.0x) | 7.1M | 11.8M | 13.0M |
-| 1.5x return | 10.6M | 19.5M | 21.9M |
-| Payback at Target-case spend and attach | - | 8.4M | 9.4M |
-| 1.5x at Target-case spend and attach | - | 13.6M | 15.2M |
+| Variant | Battlefront | Theater |
+| --- | --- | --- |
+| As modeled | -1 / 1.00x | -8 / 0.98x |
+| No Game Pass | 13 / 1.04x | 9 / 1.02x |
+| Mode 1 held all five years | -27 / 0.94x | -46 / 0.91x |
+| Agent savings not realized | -18 / 0.95x | -28 / 0.94x |
+| Activision view (Xbox fee 30%) | -31 / 0.91x | -42 / 0.90x |
 
-## Reference-class expected value (consolidated, Game Pass, ladder)
+## Copies needed
 
-- **All 14 comparables:** Failure 57%, Downside 14%, Base 7%, Breakout 21% -> E[NPV] = $-157M; E[NPV of production | Gate 3] = $-111M.
-- **7 titles on the winners' pattern:** Failure 14%, Downside 29%, Base 14%, Breakout 43% -> E[NPV] = $20M; E[NPV of production | Gate 3] = $66M.
-
-## Preproduction option: required gate quality
-
-Good = Breakout; bad = every other case. eta = P(pass Gate 3 | good), eps = P(pass Gate 3 | bad).
-
-| Reference class | P(good) | E[production NPV / good] | E[production NPV / bad] | Max eps at eta = 0.8 | Max eps at eta = 0.6 |
+| Threshold | Spend | Battlefront, Microsoft | Theater, Microsoft | Battlefront, Activision | Theater, Activision |
 | --- | --- | --- | --- | --- | --- |
-| All 14 comparables | 0.21 | 425 | -257 | 0.13 | 0.04 |
-| Winners' pattern (7) | 0.43 | 425 | -204 | 0.86 | 0.54 |
+| 1.0x | Base | 8.0M | 8.2M | 8.8M | 9.0M |
+| 1.0x | Target | 6.2M | 6.6M | 6.9M | 7.2M |
+| 1.5x | Base | 13.0M | 13.3M | 14.4M | 14.7M |
+| 1.5x | Target | 9.8M | 10.5M | 10.8M | 11.6M |
 
-Case NPVs used: Failure $-333M, Downside $-277M, Base $-114M, Breakout $380M, Target $630M. Preproduction dated to launch: $46M.
+## Copies needed to pay back, by spend per owner and attach (Microsoft view)
 
-## Copies needed to pay back, by year-one spend per owner and attach rate (consolidated, Game Pass, ladder)
+
+Battlefront edition
 
 | Spend per owner, year one | Attach 10% | Attach 20% | Attach 30% |
 | --- | --- | --- | --- |
-| $4 | 13.9M | 13.6M | 12.2M |
-| $8 | 12.9M | 11.8M | 10.5M |
-| $12 | 11.4M | 10.2M | 9.2M |
-| $15 | 10.2M | 9.2M | 8.4M |
-| $20 | 8.8M | 8.0M | 7.4M |
+| $4 | 9.7M | 9.0M | 8.3M |
+| $8 | 8.6M | 8.0M | 7.4M |
+| $12 | 7.7M | 7.2M | 6.7M |
+| $15 | 7.2M | 6.7M | 6.2M |
+| $20 | 6.3M | 5.9M | 5.6M |
+
+Theater edition
+
+| Spend per owner, year one | Attach 10% | Attach 20% | Attach 30% |
+| --- | --- | --- | --- |
+| $4 | 9.6M | 9.0M | 8.5M |
+| $8 | 8.7M | 8.2M | 7.7M |
+| $12 | 7.9M | 7.5M | 7.0M |
+| $15 | 7.4M | 7.0M | 6.6M |
+| $20 | 6.7M | 6.3M | 5.9M |
+
+## Price indifference (Base spend and attach, Microsoft view)
+
+Copies the higher price can sell and still match the NPV of the lower price at the stated copies.
+
+| Comparison | At 8M copies | At 15.4M copies | Copy loss the higher price can absorb |
+| --- | --- | --- | --- |
+| $50 Battlefront vs $40 Battlefront | 6.8M | 13.3M | 15% / 14% |
+| $60 Theater vs $50 Battlefront | 8.0M | 15.1M | 0% / 2% |
+
+## Reference-class expected value and the preproduction option (Microsoft view)
+
+
+Battlefront edition. Case NPVs: Failure -285, Downside -221, Base -1, Breakout 560, Target 849. Preproduction dated: 46.
+
+| Reference class | E[NPV] | P(breakout) | E[production NPV / breakout] | E[production NPV / other] | Max eps, eta 0.8 | Max eps, eta 0.6 |
+| --- | --- | --- | --- | --- | --- | --- |
+| All 14 comparables | -74 | 0.21 | 606 | -201 | 0.37 | 0.20 |
+| Winners' pattern (7) | 136 | 0.43 | 606 | -136 | 1.00 | 1.00 |
+
+Theater edition. Case NPVs: Failure -323, Downside -248, Base -8, Breakout 574, Target 881. Preproduction dated: 46.
+
+| Reference class | E[NPV] | P(breakout) | E[production NPV / breakout] | E[production NPV / other] | Max eps, eta 0.8 | Max eps, eta 0.6 |
+| --- | --- | --- | --- | --- | --- | --- |
+| All 14 comparables | -98 | 0.21 | 619 | -235 | 0.33 | 0.18 |
+| Winners' pattern (7) | 128 | 0.43 | 619 | -161 | 1.00 | 1.00 |
