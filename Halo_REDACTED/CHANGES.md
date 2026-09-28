@@ -3,7 +3,7 @@
 ## Files
 
 - `Halo_REDACTED_Harvest_v1.md`: the original proposal, unchanged.
-- `Halo_REDACTED_Harvest_v3.md`: the current proposal.
+- `Halo_REDACTED_Harvest_v4.md`: the current proposal.
 - `redacted_model.py`: the program model. Running `python3 redacted_model.py` regenerates `model_output.md`.
 - `model_output.md`: every table the proposal's figures come from.
 
