@@ -96,6 +96,32 @@
 | Agent savings not realized | -18 / 0.95x | -28 / 0.94x |
 | Activision view (Xbox fee 30%) | -31 / 0.91x | -42 / 0.90x |
 
+## Revenue retention in reduced modes (Base case)
+
+| Mode 4 retention (modes 2, 3, 5 in step) | Edition | Modes by year | NPV | Multiple | Copies to pay back |
+| --- | --- | --- | --- | --- | --- |
+| 60% | Battlefront | 1-4-4-4-4 | -1 | 1.00x | 8.0M |
+| 60% | Theater | 1-4-4-4-4 | -8 | 0.98x | 8.2M |
+| 45% | Battlefront | 1-2-2-2-2 | -19 | 0.96x | 8.4M |
+| 45% | Theater | 1-4-4-4-4 | -30 | 0.93x | 8.7M |
+| 35% | Battlefront | 1-1-1-2-2 | -26 | 0.94x | 8.6M |
+| 35% | Theater | 1-2-2-2-4 | -42 | 0.91x | 8.9M |
+
+## Year-five live margin and the median comparable ($M)
+
+| Case | Edition | Year-five live revenue less live cost |
+| --- | --- | --- |
+| Base | Battlefront | 13 |
+| Base | Theater | 11 |
+| Breakout | Battlefront | 82 |
+| Breakout | Theater | 76 |
+| Target | Battlefront | 116 |
+| Target | Theater | 107 |
+
+Space Marine 2 scale (4.5M copies, Base spend), Battlefront: NPV -148, 0.58x.
+
+Space Marine 2 scale (4.5M copies, Base spend), Theater: NPV -172, 0.57x.
+
 ## Copies needed
 
 | Threshold | Spend | Battlefront, Microsoft | Theater, Microsoft | Battlefront, Activision | Theater, Activision |

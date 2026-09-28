@@ -285,6 +285,32 @@ def report():
             cells.append(f"{m(r['npv'])} / {r['multiple']:.2f}x")
         P(f"| {label} | " + " | ".join(cells) + " |")
 
+    P("\n## Revenue retention in reduced modes (Base case)\n")
+    P("| Mode 4 retention (modes 2, 3, 5 in step) | Edition | Modes by year | NPV | Multiple | Copies to pay back |")
+    P("| --- | --- | --- | --- | --- | --- |")
+    saved = dict(MODE_REVENUE_FACTOR)
+    for rf in ({1: 1.00, 2: 0.92, 3: 0.80, 4: 0.60, 5: 0.30},
+               {1: 1.00, 2: 0.85, 3: 0.65, 4: 0.45, 5: 0.20},
+               {1: 1.00, 2: 0.80, 3: 0.55, 4: 0.35, 5: 0.15}):
+        MODE_REVENUE_FACTOR.update(rf)
+        for e in EDITIONS:
+            r = run(replace(CASES["Base"], edition=e))
+            pb = solve_copies(replace(CASES["Base"], edition=e), 1.0)
+            P(f"| {rf[4]:.0%} | {e.name} | " + "-".join(str(x['mode']) for x in r['rows'])
+              + f" | {m(r['npv'])} | {r['multiple']:.2f}x | {pb:.1f}M |")
+    MODE_REVENUE_FACTOR.update(saved)
+
+    P("\n## Year-five live margin and the median comparable ($M)\n")
+    P("| Case | Edition | Year-five live revenue less live cost |")
+    P("| --- | --- | --- |")
+    for k in ("Base", "Breakout", "Target"):
+        for e in EDITIONS:
+            x = run(replace(CASES[k], edition=e))["rows"][4]
+            P(f"| {k} | {e.name} | {m(x['live_rev'] - x['live_cost'])} |")
+    for e in EDITIONS:
+        r = run(replace(CASES["Base"], copies=4.5, edition=e))
+        P(f"\nSpace Marine 2 scale (4.5M copies, Base spend), {e.name}: NPV {m(r['npv'])}, {r['multiple']:.2f}x.")
+
     P("\n## Copies needed\n")
     P("| Threshold | Spend | Battlefront, Microsoft | Theater, Microsoft | Battlefront, Activision | Theater, Activision |")
     P("| --- | --- | --- | --- | --- | --- |")

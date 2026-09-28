@@ -52,13 +52,19 @@
 10. **Failure case:** 1M copies, $3 spend per owner, 5% attach.
 11. **Team structure:** Foundation / REDACTED / Master Chief teams, with Chief preproduction starting around month 24.
 
-## Still open from the simulated committee reading
+## v4 edits (applied)
 
-- The labour rate and contingency benchmark are derived from hacked Insomniac files (Kotaku). Re-derive them from public sources before circulating.
-- Tone pass on the Master Chief section and the phrase "military industrial fantasy".
-- A Spartan scale rule, so that 64-player Battlefronts are not full of Spartan-IIs.
-- A central forecast, and how REDACTED compares with Marathon.
-- Gate 1 and 2 criteria strong enough to reject failures (ε ≤ 0.37 against all 14 comparables).
+- Insomniac-derived figures replaced: lead-studio rate from BLS (Seattle-area software developer mean wage grossed up at the ~70% private-industry wage share); contingency tied to Gate 3's 10% band plus the unconfirmed 5.8% agent saving; budget comparison rebuilt on Helldivers 2's team, Concord and Activision's own court-filed Call of Duty costs.
+- Factual fixes: ARC Raiders launched on all three platforms; Gears of War: E-Day (Oct 6, 2026, Horde Siege) acknowledged in the portfolio and as Microsoft's own Unreal Engine 5 production; DMZ's return in Modern Warfare 4; Space Marine 2's 6v6 PvP; Theater breakout consolidates in years four and five.
+- Master Chief team: Activision has already begun assembling it; REDACTED's lead team is separate and shares only the Foundation group.
+- Added: planning case and Marathon comparison, year-five live margins, revenue-retention sensitivity, Spartan rule, orchestrator definition, seven-week seasons.
+- Gates: Gate 1 head-to-head against Helldivers 2; Gate 2 price test tied to the 2% indifference; Gate 3 four-week closed test (40% week-four retention), $50 vs $40 intent within 14%, positive expected NPV replacing the median test.
+- Tone: Master Chief section trimmed; Infinite's Steam decline and the "military industrial" phrase removed; "overpowered" rephrased.
+
+## Still open
+
+- Chart updates below.
+- Gate 3 retention target (40% of week-one players in week four) is a proposed threshold; the outcomes study should calibrate it against comparables' public player curves.
 
 ## Charts to update
 
