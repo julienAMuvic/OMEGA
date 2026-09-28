@@ -19,7 +19,7 @@
   - ARC Raiders is built on Unreal Engine 5.
   - Squad runs 100-player combined arms on Unreal Engine 5.5.
   - Call of Duty uses a proprietary engine.
-  - Activision has not named an engine for the Master Chief game, so the reuse credit is split: assets carry to any engine, while engine work and tools carry only if that game also uses Unreal Engine 5.
+  - Activision has not named an engine for its Halo game, so the reuse credit is split: assets carry to any engine, while engine work and tools carry only to later Halo games that stay on Unreal Engine 5.
 - **Mode ladder changes.**
   - Each mode now retains a share of spend and expansion attach (ρ).
   - The ladder picks the mode with the best live margin. Without ρ, a fuller mode only added cost, which made the copies-needed grid non-monotonic.
@@ -50,16 +50,23 @@
 8. **Marketing timing:** 15% in months 24–36, 35% in months 36–48, 50% in the launch year.
 9. **Game Pass:** Xbox copies after year one are halved; Game Pass players equal Xbox's year-one buyers, and they spend and attach at half rate; no subscription value is credited.
 10. **Failure case:** 1M copies, $3 spend per owner, 5% attach.
-11. **Team structure:** Foundation / REDACTED / Master Chief teams, with Chief preproduction starting around month 24.
+11. **Team structure:** REDACTED lead team and Foundation group, both drawn from Activision's purpose-built Halo team.
 
 ## v4 edits (applied)
 
 - Insomniac-derived figures replaced: lead-studio rate from BLS (Seattle-area software developer mean wage grossed up at the ~70% private-industry wage share); contingency tied to Gate 3's 10% band plus the unconfirmed 5.8% agent saving; budget comparison rebuilt on Helldivers 2's team, Concord and Activision's own court-filed Call of Duty costs.
 - Factual fixes: ARC Raiders launched on all three platforms; Gears of War: E-Day (Oct 6, 2026, Horde Siege) acknowledged in the portfolio and as Microsoft's own Unreal Engine 5 production; DMZ's return in Modern Warfare 4; Space Marine 2's 6v6 PvP; Theater breakout consolidates in years four and five.
-- Master Chief team: Activision has already begun assembling it; REDACTED's lead team is separate and shares only the Foundation group.
+- Team: REDACTED's lead team and Foundation group come from the purpose-built Halo team Activision has begun assembling.
 - Added: planning case and Marathon comparison, year-five live margins, revenue-retention sensitivity, Spartan rule, orchestrator definition, seven-week seasons.
 - Gates: Gate 1 head-to-head against Helldivers 2; Gate 2 price test tied to the 2% indifference; Gate 3 four-week closed test (40% week-four retention), $50 vs $40 intent within 14%, positive expected NPV replacing the median test.
 - Tone: Master Chief section trimmed; Infinite's Steam decline and the "military industrial" phrase removed; "overpowered" rephrased.
+
+## Next-game framing
+
+- Verified against the cited sources (Kotaku, GamesRadar+, Yahoo citing The Hollywood Reporter): Activision has committed to a "full-feature, mainline installment" whose goal is to "make the greatest Halo game ever". It has named no story, protagonist, genre or engine, and it has not said the game is a Master Chief or Cortana story.
+- The proposal now pitches REDACTED as that next Halo game. Removed: the two-pillar framing, "ships ahead of the next Master Chief epic", the Chief "resting" until a Chief game, the separate Master Chief team, and reuse into "the Master Chief game". Reuse now carries into later Halo games.
+- Kept: the evidence of Chief and Cortana fatigue, as the case for a Chief-free next game; the Chief and Cortana stay off-screen by design.
+- Added: Marcus Lehto's $600M–$800M estimate for a mainline Halo, as the budget comparison.
 
 ## Still open
 
